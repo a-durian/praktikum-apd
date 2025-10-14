@@ -274,4 +274,3 @@ while True:
                             print(f"Tersisa {percobaan}x Percobaaan.\n")
     else:
         print("\n! Tolong ikuti instruksi yang tersedia. Silahkan coba lagi.\n")
-print("\nTembus kebawah!")
