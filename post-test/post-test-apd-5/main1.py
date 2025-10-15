@@ -121,7 +121,7 @@ while True:
                                         print("\n! Tolong ikuti instruksi yang tersedia. Silahkan coba lagi.\n")
                             else:
                                 print("\n! Tolong ikuti instruksi yang tersedia. Silahkan coba lagi.\n")
-                    elif login_NA != nama_admin or login_PA != pw_admin:
+                    else:
                         percobaan -= 1
                         if percobaan == 0:
                             print("nLogin gagal! Program dihentikan.\n")
@@ -261,7 +261,7 @@ while True:
                             else:
                                 print(" \n! Tolong ikuti instruksi yang tersedia. Silahkan coba lagi.\n")
                                     
-                    elif login_NC != nama_customer or login_PC != pw_customer:
+                    else:
                         percobaan -= 1
                         if percobaan == 0:
                             print("Login gagal! Program dihentikan.")
