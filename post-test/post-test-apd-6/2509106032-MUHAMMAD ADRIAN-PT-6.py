@@ -175,7 +175,7 @@ while True:
                                         if menu_grosir == 0:
                                             print("\nKembali ke menu awal...\n")
                                             break
-                                        if menu_grosir in Grosi
+                                        if menu_grosir in Grosir:
                                             jumlah_input = input("Masukkan jumlah [default 1]: ")
                                             if jumlah_input == "":
                                                 jumlah = 1
@@ -217,8 +217,14 @@ while True:
                                     menu_checkout = input("\nPilih menu opsi yang tersedia diatas [1/2/3]: ")
                                     if menu_checkout == '1':
                                         print("\nLanjut ke pembayaran...\n")
-                                        for i, produk in Grosir.items():
-                                            print(f"{i:<4} {produk['nama']:<30} Rp.{produk['harga']:>9,}")
+                                        for i, (product_id, jumlah) in enumerate(Keranjang_Belanja.items(), 1):
+                                            nama = Grosir[product_id]['nama']
+                                            harga = Grosir[product_id]['harga']
+                                            subtotal = harga * jumlah
+                                            total += subtotal
+                                            print(f"{i:<4} {nama:<30} {jumlah:>3}  Rp.{subtotal:>9,}")
+                                        print("-"*50)
+                                        print(f"{'Total pembayaran:':<35} Rp.{total:>9,}")
                                         while True: 
                                             opsi_beli = input("\nApakah anda mau melakukan transaksi? [y/n]")
                                             if opsi_beli == 'y' or opsi_beli == 'Y':  
