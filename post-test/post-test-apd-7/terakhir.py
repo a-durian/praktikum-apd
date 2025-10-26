@@ -22,8 +22,6 @@ Grosir = {
 Keranjang_Belanja = {}
 Riwayat_Transaksi = []
 
-
-
 def topMessage(topMessage):
     print("="*len(topMessage))
     print("="*20 + topMessage + "="*20)
@@ -43,17 +41,19 @@ def pilihKarakter():
         pilihKarakter()
         
 def Registrasi():
+    percobaan = 5
     def Login():
-        percobaan = 5
         while percobaan > 0:
             loginNama = input("Nama: ")
             loginPW = input("Password: ")
             if loginNama == inputNama and loginPW == inputPW:
-                print("\nLogin berhasil!")
-                return True
+                print("\nLogin berhasil!\n")
+                topMessage(f"SELAMAT DATANG KEMBALI, {loginNama.upper()}")
+                menuAdmin()
             else:
                 percobaan -= 1
                 print(f"\nLogin gagal! Sisa percobaan: {percobaan}")
+                return Login()
         print("\nAnda telah melakukan 5 percobaan login yang gagal. Program dihentikan.")
         return False
     try:
@@ -63,16 +63,62 @@ def Registrasi():
             raise ValueError("\n!! Nama dan Password tidak boleh kosong. Silahkan coba lagi. !!\n")
         elif (len(str(inputPW))) + 1 < 8:
             raise ValueError("\n!! Password harus terdiri dari minimal 8 karakter. Silahkan coba lagi. !!\n")
-        else:
-            print("\nSign up berhasil! silahkan login dengan akun anda:")
-            return Login()
     except ValueError as e:
         print(e)
         return Registrasi()
-    
+    finally:
+        print("\nSign up berhasil! silahkan login dengan akun anda:")
+        return Login()
 
+def menuAdmin():
+    print("\n" + "-"* 10 + " Menu: Admin " + "-"*10)
+    print('1. Produk yang tersedia')
+    print('2. Tambah Produk')
+    print('3. Hapus Produk')
+    pilihanAdmin = input("\nPilih menu opsi yang tersedia diatas [1/2/3]: ")
+    if pilihanAdmin == "1":
+        listGrosir()
+    elif pilihanAdmin == "2":
+        topMessage("TAMBAH PRODUK")
+        tambahProduk()
 
+def listGrosir():
+    topMessage("GROSIR")
+    print(f"{'No':<4} {'Nama Produk':<30}{'Harga':>12}")
+    print("-"*50)
+    for i, produk in Grosir.items():
+        print(f"{i:<4} {produk['nama']:<30} Rp.{produk['harga']:>9,}")
+    kembaliKeMenu(menuAdmin)
 
+def tambahProduk():
+    nama_produk_baru = input("Masukkan nama produk baru: ")
+    input_harga_produk_baru = input("Masukkan harga produk baru: Rp.")
+    try:
+        harga_produk_baru = int(input_harga_produk_baru)
+        if nama_produk_baru == "" or harga_produk_baru <= 0:
+            raise ValueError("\n!! Nama produk tidak boleh kosong dan harga harus lebih dari 0. Silahkan coba lagi. !!\n")
+    except ValueError as e:
+        print(e)
+        return tambahProduk()
+    else:
+        id_baru = max(Grosir.keys()) + 1
+        Grosir[id_baru] = {"nama": nama_produk_baru, "harga": harga_produk_baru}
+        print(f"\nProduk '{nama_produk_baru}' dengan harga Rp.{harga_produk_baru:,} berhasil ditambahkan dengan ID {id_baru}!")
+        opsi_lagi = input("Tambah produk lagi? [y/n]: ")
+        if opsi_lagi.lower() == 'y':
+           return tambahProduk()
+        else:
+           kembaliKeMenu(menuAdmin)
+
+def kembaliKeMenu(menuAwalnya):
+    input_kembali = input("\nMasukkan [0] untuk kembali ke menu awal: ")
+    if input_kembali == '0':
+        print("kembali ke menu awal...")
+        menuAwalnya()
+    else:
+        print("\n! Tolong ikuti instruksi yang tersedia. Silahkan coba lagi.\n")
+        kembaliKeMenu(menuAwalnya)
+        
 def alurAdmin():
     print("\nSilahkan registrasi diri anda terlebih dahulu.")
     
