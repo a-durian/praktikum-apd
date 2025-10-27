@@ -26,6 +26,9 @@ def topMessage(topMessage):
     print("="*len(topMessage))
     print("="*20 + topMessage + "="*20)
     print("="*len(topMessage))
+
+# def secTopMessage(secTopMessage):
+#     print
     
 def pilihKarakter():
     print("\nPilih karakter anda:")
@@ -33,7 +36,7 @@ def pilihKarakter():
     print('2. Customer')
     pilihan_karakter = input("\nPilih opsi diatas sebelum memasuki program [1/2]: ")
     if pilihan_karakter == '1':
-        alurAdmin()
+        menuAdmin()
     elif pilihan_karakter == '2':
         alurCustomer()
     else:
@@ -52,7 +55,7 @@ def Registrasi():
                 menuAdmin()
             else:
                 percobaan -= 1
-                print(f"\nLogin gagal! Sisa percobaan: {percobaan}")
+                print(f"\n!! Login gagal! Sisa percobaan: {percobaan} !!")
                 return Login()
         print("\nAnda telah melakukan 5 percobaan login yang gagal. Program dihentikan.")
         return False
@@ -75,13 +78,19 @@ def menuAdmin():
     print('1. Produk yang tersedia')
     print('2. Tambah Produk')
     print('3. Hapus Produk')
+    print('4. Logout')
     pilihanAdmin = input("\nPilih menu opsi yang tersedia diatas [1/2/3]: ")
     if pilihanAdmin == "1":
         listGrosir()
     elif pilihanAdmin == "2":
         topMessage("TAMBAH PRODUK")
         tambahProduk()
-
+    elif pilihanAdmin == "3":
+        topMessage("HAPUS PRODUK")
+        
+    elif pilihanAdmin == "4":
+        print()
+    
 def listGrosir():
     topMessage("GROSIR")
     print(f"{'No':<4} {'Nama Produk':<30}{'Harga':>12}")
@@ -104,12 +113,38 @@ def tambahProduk():
         id_baru = max(Grosir.keys()) + 1
         Grosir[id_baru] = {"nama": nama_produk_baru, "harga": harga_produk_baru}
         print(f"\nProduk '{nama_produk_baru}' dengan harga Rp.{harga_produk_baru:,} berhasil ditambahkan dengan ID {id_baru}!")
-        opsi_lagi = input("Tambah produk lagi? [y/n]: ")
-        if opsi_lagi.lower() == 'y':
-           return tambahProduk()
-        else:
-           kembaliKeMenu(menuAdmin)
+        tambahLagi(menuAdmin)
 
+def hapusProduk():
+    topMessage("HAPUS PRODUK")
+    print(f"{'No':<4} {'Nama Produk':<30}{'Harga':>12}")
+    print("-"*61)
+    for i, produk in Grosir.items():
+        print(f"{i:<4} {produk['nama']:<30} Rp.{produk['harga']:>9,}")
+    print("-"*61)
+    print("\nMasukkan [0] untuk kembali ke menu awal: ")
+    def inputHapusProduk():
+        try:
+            inputHapus = int(input("Pilih nomor produk yang ingin dihapus: "))
+            if not inputHapus.isdigit:
+                raise ValueError("\n!! Input harus nomor. Silahkan coba lagi. !!\n")
+            elif  not inputHapus in Grosir:
+                raise ValueError("\n!! Nomor produk tidak ditemukan. Silahkan coba lagi. !!\n")
+        except ValueError as e:
+            print(e)
+            inputHapusProduk
+        else:
+            if inputHapus == '0':
+                print("\nKembali ke menu awal...\n")
+                kembaliKeMenu(menuAdmin)
+            else:
+                del Grosir[inputHapus]
+                print("\nProduk berhasil dihapus.")
+            
+            
+            
+    
+    
 def kembaliKeMenu(menuAwalnya):
     input_kembali = input("\nMasukkan [0] untuk kembali ke menu awal: ")
     if input_kembali == '0':
@@ -119,14 +154,24 @@ def kembaliKeMenu(menuAwalnya):
         print("\n! Tolong ikuti instruksi yang tersedia. Silahkan coba lagi.\n")
         kembaliKeMenu(menuAwalnya)
         
-def alurAdmin():
-    print("\nSilahkan registrasi diri anda terlebih dahulu.")
+# def alurAdmin():
+#     print("\nSilahkan registrasi diri anda terlebih dahulu.")
     
-    Registrasi()
+#     Registrasi()
         
 def alurCustomer():
     print("alur customer")
     
 topMessage("SELAMAT DATANG DI KLIKCODEMARET")
 pilihKarakter()
-        
+
+def tambahLagi(kembali):
+    opsi_lagi = input("Tambah produk lagi? [y/n]: ")
+    if opsi_lagi == "y" or opsi_lagi == "Y":
+        return tambahProduk()
+    elif opsi_lagi == "n" or opsi_lagi == "N":
+        ("\nKembali ke menu awal..\n")
+        kembaliKeMenu(kembali)
+    else:
+        print("\n!! Input tidak valid. Coba lagi !!\n")
+        tambahProduk

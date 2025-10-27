@@ -55,6 +55,7 @@ while True:
                             print('1. Produk yang tersedia')
                             print('2. Tambah Produk')
                             print('3. Hapus Produk')
+                            print('4. Logout ')
                             pilihan_admin = input("\nPilih menu opsi yang tersedia diatas [1/2/3]: ")
                             if pilihan_admin == '1':
                                 while True:
