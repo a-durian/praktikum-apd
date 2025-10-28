@@ -183,7 +183,7 @@ def menuCustomer():
     else:
         print("\n!! Pilihan tidak valid. Silahkan coba lagi. !!\n")
         return menuCustomer()
-
+# FUNGSI CHECKOUT KE KERANJANG BELANJA
 def Checkout():
     print("")
     listGrosir()
@@ -202,6 +202,7 @@ def Checkout():
                 jumlah = int(jumlah_input)
             else:
                 print("\nJumlah tidak valid. Silahkan coba lagi.\n")
+                Checkout()
             Keranjang_Belanja[menu_grosir] = Keranjang_Belanja.get(menu_grosir, 0) + jumlah
             nama = Grosir[menu_grosir]['nama']
             harga = Grosir[menu_grosir]['harga']
@@ -209,9 +210,10 @@ def Checkout():
             opsiLagi(menuCustomer, "Checkout produk lagi?", Checkout)
         else:
             print("\nProduk tidak ditemukan. Silahkan coba lagi.\n")
-            return jumlah_input
+            Checkout()
     else:
         print("\n!! Input harus berupa nomor. Silahkan coba lagi. !!\n")
+        Checkout()
 # LIST KERANJANG BELANJA
 def listKeranjangBelanja():
     print(f"{'No':<4} {'Nama Produk':<30}{'Harga':>12}")
@@ -256,9 +258,7 @@ def opsiPembayaran():
     except ValueError:
         print("Keranjang belanja kosong.")
         kembaliKeMenu(menuCustomer)
-    # if not Keranjang_Belanja:
-    #     print("Keranjang belanja kosong.")
-    #     kembaliKeMenu(menuCustomer)
+ 
     opsi_beli = input("\nApakah anda mau melakukan transaksi? [y/n]: ")
     if opsi_beli == 'y' or opsi_beli == 'Y':
         print("\nBerhasil melakukan pembelian! Terima kasih telah berbelanja di KlikCodemaret.\n")
@@ -345,5 +345,3 @@ def opsiLogout(insertMenu, menuApa):
 # MAIN PROGRAM
 topMessage("SELAMAT DATANG DI KLIKCODEMARET")
 pilihKarakter()
-
-# Catatan perhatian!:
