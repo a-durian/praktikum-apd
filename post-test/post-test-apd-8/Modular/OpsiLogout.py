@@ -1,3 +1,5 @@
+from Modular.PilihKarakter import pilihKarakter
+
 def opsiLogout(insertMenu, menuApa):
     inputLogout = input("\nApakah anda yakin untuk logout dari akun anda? [y/n]: ")
     if inputLogout == "y" or inputLogout == "Y":

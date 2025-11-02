@@ -2,7 +2,8 @@ from Adds.Headline import topMessage
 from Modular.ListGrosir import listGrosir
 from Modular.OpsiLogout import opsiLogout
 from Menu_Admin.TambahProduk import tambahProduk
-
+from Modular.OpsiKembali import kembaliKeMenu
+from HapusProduk import hapusProduk
 def menuAdmin():
     topMessage("Menu: Admin")
     print('1. Produk yang tersedia')

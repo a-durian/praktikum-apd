@@ -1,3 +1,5 @@
+from Modular.OpsiKembali import kembaliKeMenu
+
 def kembaliKeMenu(menuAwalnya):
     input_kembali = input("\nMasukkan [0] untuk kembali ke menu awal: ")
     if input_kembali == '0':

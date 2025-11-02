@@ -1,5 +1,5 @@
 # IMPORT DICT N LIST
-from dictnlist import Grosir
+from Adds.dictnlist import Grosir
 
 # FUNGSI LIST GROSIR
 

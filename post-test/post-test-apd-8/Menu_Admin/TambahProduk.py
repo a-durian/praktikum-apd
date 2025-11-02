@@ -1,3 +1,9 @@
+
+from Modular.OpsiLagi import opsiLagi
+from Adds.dictnlist import Grosir
+from Menu_Admin.Menu import menuAdmin
+# FUNGSI TAMBAH PRODUK
+
 def tambahProduk():
     nama_produk_baru = input("\nMasukkan nama produk baru: ")
     harga_produk_baru = input("Masukkan harga produk baru: Rp.")

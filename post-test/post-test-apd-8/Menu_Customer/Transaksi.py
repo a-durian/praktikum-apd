@@ -1,3 +1,8 @@
+from Adds.dictnlist import Grosir, Riwayat_Transaksi
+from Modular.OpsiKembali import kembaliKeMenu
+from Menu_Customer.Menu import menuCustomer
+# FUNGSI MENU TRANSAKSI
+
 def menuTransaksi():
     if not Riwayat_Transaksi:
         print("Belum ada transaksi.")

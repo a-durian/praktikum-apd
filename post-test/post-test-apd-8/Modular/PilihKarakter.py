@@ -1,3 +1,8 @@
+from Menu_Admin.Menu import menuAdmin
+from Menu_Customer.Menu import menuCustomer
+from Modular.Registrasi import Registrasi
+
+
 # FUNGSI PILIH KARAKTER
 def pilihKarakter():
     print("\nPilih karakter anda:")

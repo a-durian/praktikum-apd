@@ -1,3 +1,6 @@
+from Modular.OpsiKembali import kembaliKeMenu
+
+# FUNGSI REGISTRASI
 def Registrasi(fungsiMenu):
     def Login(fungsiMenu):
         percobaan = 5

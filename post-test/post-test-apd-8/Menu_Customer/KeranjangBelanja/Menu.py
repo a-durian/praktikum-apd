@@ -1,3 +1,7 @@
+from Pembayaran import opsiPembayaran
+from Hapus import opsiHapusDariKeranjang
+from Menu import menuCustomer
+
 # FUNGSI MENU KERANJANG BELANJA
 def menuKeranjang():
     
