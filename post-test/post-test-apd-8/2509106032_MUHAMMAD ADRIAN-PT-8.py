@@ -7,7 +7,8 @@ else:
     _ = system('clear')
 
 # IMPORT REGISTRASI LOGIN
-from registrasi import Registrasi
+from Modular.Registrasi import Registrasi
+from Adds.Headline import topMessage
 
 # DICTIONARY PRODUK
 # Grosir = {
