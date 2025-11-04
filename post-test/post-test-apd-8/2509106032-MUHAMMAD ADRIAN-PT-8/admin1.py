@@ -1,17 +1,41 @@
-# admin.py
+"""
+admin1.py
+Penjelasan singkat:
+- Modul ini berisi fungsi-fungsi yang digunakan oleh user dengan peran Admin.
+- Fungsi utama: menampilkan daftar produk (`listGrosir`), menambah produk (`tambahProduk`),
+  menghapus produk (`hapusProduk`) dan menu admin (`menuAdmin`).
+
+Tambahan komentar ditaruh di dalam fungsi untuk membantu pembacaan kode.
+"""
+
+from prettytable import PrettyTable 
 from data_dictlist import Grosir
 from tambahan import opsiLagi, kembaliKeMenu, opsiLogout
 from helperss import topMessage
-# FUNGSI LIST GROSIR
+
+# PrettyTable digunakan untuk menampilkan tabel produk secara rapi di terminal
+tabel = PrettyTable()
+
 def listGrosir():
-    print(f"{'No':<4} {'Nama Produk':<30}{'Harga':>12}")
-    print("-"*50)
-    for i, produk in Grosir.items():
-        print(f"{i:<4} {produk['nama']:<30} Rp.{produk['harga']:>9,}")
-    print("-"*50)
+    """Tampilkan daftar produk dari dictionary `Grosir`.
+
+    Membersihkan isi tabel sebelumnya supaya tidak terjadi duplikasi saat dipanggil berulang.
+    """
+    tabel.clear_rows()  # bersihkan baris lama pada objek tabel
+    tabel.field_names = ["No", "Nama Produk", "Harga"]
+    tabel.align["Nama Produk"] = "l"
+    tabel.align["Harga"] = "l"
+    for i, produk in Grosir.items():  # tambahkan setiap produk ke tabel
+        tabel.add_row([i, produk['nama'], f"Rp.{produk['harga']:,}"])
+    print(tabel)
     
-# FUNGSI TAMBAH PRODUK
+
 def tambahProduk():
+    """Minta input user untuk menambah produk baru ke `Grosir`.
+
+    Validasi sederhana untuk memastikan harga berupa angka dan > 0.
+    Setelah berhasil, menanyakan apakah ingin menambah lagi via `opsiLagi`.
+    """
     nama_produk_baru = input("\nMasukkan nama produk baru: ")
     harga_produk_baru = input("Masukkan harga produk baru: Rp.")
     try:
@@ -19,50 +43,59 @@ def tambahProduk():
     except ValueError:
         print("\n!! Harga produk harus berupa angka. Silahkan coba lagi. !!\n")
         tambahProduk()
-    if nama_produk_baru == "" or nama_produk_baru == " " or  harga_produk_baru == "" or harga_produk_baru == " " :
+        return
+    if nama_produk_baru == "" or nama_produk_baru == " " or harga_produk_baru == "" or harga_produk_baru == " ":
         print("\n!! Nama atau harga produk tidak boleh kosong. Silahkan coba lagi. !!\n")
-    elif harga_produk_baru <= 0:
+        return
+    if harga_produk_baru <= 0:
         print("\n!! Harga produk harus lebih dari 0. Silahkan coba lagi. !!\n")
+        return
     id_baru = max(Grosir.keys()) + 1
     Grosir[id_baru] = {"nama": nama_produk_baru, "harga": harga_produk_baru}
     print(f"\nProduk '{nama_produk_baru}' dengan harga Rp.{harga_produk_baru:,} berhasil ditambahkan dengan ID {id_baru}!")
     opsiLagi(menuAdmin, "Tambah produk lagi?", tambahProduk)
-    
-# FUNGSI HAPUS PRODUK
+
+
 def hapusProduk():
+    """Hapus produk berdasarkan nomor (key) pada `Grosir`.
+
+    Setelah penghapusan, fungsi mengatur ulang nomor (reindex) supaya tetap berurutan.
+    """
     listGrosir()
     print("\nMasukkan [0] untuk kembali ke menu awal")
+
     def inputHapusProduk():
         inputHapus = input("Pilih nomor produk yang ingin dihapus: ")
-        
         try:
             intInputHapus = int(inputHapus)
         except ValueError:
             print("\n!! Input harus nomor. Silahkan coba lagi. !!\n")
-            inputHapusProduk()
+            return inputHapusProduk()
+
         if intInputHapus == 0:
             print("\nKembali ke menu awal...\n")
-            menuAdmin()
-        elif intInputHapus not in Grosir:
+            return menuAdmin()
+        if intInputHapus not in Grosir:
             print("\n!! Nomor produk tidak ditemukan. Silahkan coba lagi. !!\n")
-            inputHapusProduk() 
-        
+            return inputHapusProduk()
+
+        # hapus produk dan reindex dictionary agar nomor tetap berurutan
         del Grosir[intInputHapus]
-        # Mengatur ulang nomor urut
         grosirBaru = {}
         idBaru = 1
         for _, produk in sorted(Grosir.items()):
             grosirBaru[idBaru] = produk
             idBaru += 1
-        # Update dictionary Grosir dengan nomor yang baru
         Grosir.clear()
         Grosir.update(grosirBaru)
         print("\nProduk berhasil dihapus.")
         opsiLagi(menuAdmin, "Hapus produk lagi?", hapusProduk)
+
     inputHapusProduk()
-    
-# FUNGSI MENU ADMIN
+
+
 def menuAdmin():
+    """Tampilan menu untuk peran Admin dan routing ke fungsi terkait."""
     topMessage("Menu: Admin")
     print('1. Produk yang tersedia')
     print('2. Tambah Produk')

@@ -1,3 +1,11 @@
+"""
+data_dictlist.py
+Menyimpan struktur data global yang digunakan oleh program:
+- `Grosir`: dictionary produk (id -> {nama, harga})
+- `Keranjang_Belanja`: dictionary sementara untuk keranjang (product_id -> jumlah)
+- `Riwayat_Transaksi`: list berisi snapshot keranjang untuk setiap transaksi
+"""
+
 # DICTIONARY PRODUK
 Grosir = {
     1: {"nama": "Roti Tawar", "harga": 12000},
@@ -12,5 +20,7 @@ Grosir = {
     10: {"nama": "Beras 5KG", "harga": 77000}
 }
 
-Keranjang_Belanja = {}
-Riwayat_Transaksi = []
+Keranjang_Belanja = {}  # product_id -> jumlah
+# Riwayat_Transaksi menyimpan snapshot sebagai struktur:
+# {"waktu": datetime, "items": {product_id: jumlah, ...}}
+Riwayat_Transaksi = []  # list of transaksi snapshot

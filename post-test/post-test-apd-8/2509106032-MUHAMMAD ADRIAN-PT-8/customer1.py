@@ -2,6 +2,9 @@ from tambahan import kembaliKeMenu, opsiLagi, opsiLogout
 from data_dictlist import Grosir, Keranjang_Belanja, Riwayat_Transaksi
 from admin1 import listGrosir
 from helperss import topMessage
+from prettytable import PrettyTable 
+from datetime import datetime
+
 # FUNGSI ALUR CUSTOMER
 def menuCustomer():
     topMessage("Menu: Customer")
@@ -61,8 +64,12 @@ def Checkout():
         
 # LIST KERANJANG BELANJA
 def listKeranjangBelanja():
-    print(f"{'No':<4} {'Nama Produk':<30}{'Harga':>12}")
-    print("-"*50) 
+    
+    tabel_keranjang = PrettyTable()
+    tabel_keranjang.field_names = ["No", "Nama Produk", "Jumlah", "Subtotal"]
+    print("")
+    tabel_keranjang.align["Nama Produk"] = "l"
+    tabel_keranjang.align["Subtotal"] = "l"
     if not Keranjang_Belanja:
         print("Keranjang belanja kosong.")
         kembaliKeMenu(menuCustomer)
@@ -73,10 +80,11 @@ def listKeranjangBelanja():
             harga = Grosir[product_id]['harga']
             subtotal = harga * jumlah
             total += subtotal
-            print(f"{i:<4} {nama:<30} {jumlah:>3}  Rp.{subtotal:>9,}")
-        print("-"*50)
-        print(f"{'Total pembayaran:':<35} Rp.{total:>9,}")
+            tabel_keranjang.add_row([i, nama, jumlah, f"Rp.{subtotal:,}"])
+        tabel_keranjang.add_row(["", "", "Total:", f"Rp.{total:,}"])
+        print(tabel_keranjang)
         menuKeranjang()
+        
         
 # MENU KERANJANG
 def menuKeranjang():
@@ -109,10 +117,14 @@ def opsiPembayaran():
     opsi_beli = input("\nApakah anda mau melakukan transaksi? [y/n]: ")
     if opsi_beli == 'y' or opsi_beli == 'Y':
         print("\nBerhasil melakukan pembelian! Terima kasih telah berbelanja di KlikCodemaret.\n")
-        Riwayat_Transaksi.append(Keranjang_Belanja.copy())
+        # Simpan snapshot keranjang beserta waktu transaksi
+        Riwayat_Transaksi.append({
+            "waktu": datetime.now(),
+            "items": Keranjang_Belanja.copy()
+        })
         Keranjang_Belanja.clear()
         print("Kembali ke menu customer...\n")
-        menuCustomer()
+        return menuCustomer()
     elif opsi_beli == 'n' or opsi_beli == 'N':
         print("\nTransaksi dibatalkan. Kembali ke menu customer...\n")
         menuCustomer()
@@ -122,16 +134,25 @@ def opsiPembayaran():
     
 # OPSI HAPUS DARI KERANJANG
 def opsiHapusDariKeranjang():
+    # DEKLARASI tabelHapus_dariKeranjang
+    tabelHapus_dariKeranjang = PrettyTable()
     print("\nHapus produk dari keranjang belanja...\n")
+    # Cek apakah keranjang belanja kosong
     if not Keranjang_Belanja:
         print("Keranjang belanja kosong.")
         kembaliKeMenu(menuCustomer)
+    # Jika tidak kosong, tampilkan isi keranjang belanja
     else:
         items = list(Keranjang_Belanja.items())
         for no_id, (id_produk, jumlah) in enumerate(items, 1):
             nama = Grosir[id_produk]['nama']
             harga = Grosir[id_produk]['harga']
-            print(f"{no_id}. {nama} x{jumlah} - Rp.{harga*jumlah:,}")
+            # Prettytable tabelHapus_dariKeranjang
+            tabelHapus_dariKeranjang.field_names = ["No", "Nama Produk", "Jumlah", "Harga"]
+            tabelHapus_dariKeranjang.add_row([no_id, nama, jumlah, f"Rp.{harga * jumlah:,}"])
+        tabelHapus_dariKeranjang.align["Nama Produk"] = "l"
+        tabelHapus_dariKeranjang.align["Harga"] = "l"
+        print(tabelHapus_dariKeranjang)
         hapus_produk = input("\nMasukkan nomor produk yang ingin dihapus: ")
         if hapus_produk.isdigit():
             hapus_noId = int(hapus_produk)
@@ -146,24 +167,34 @@ def opsiHapusDariKeranjang():
         else:
             print("\n! Tolong ikuti instruksi yang tersedia. Silahkan coba lagi.\n")
             return opsiHapusDariKeranjang()
-        
+
 # MENU TRANSAKSI CUSTOMER
 def menuTransaksi():
     if not Riwayat_Transaksi:
         print("Belum ada transaksi.")
-        kembaliKeMenu(menuCustomer)
+        return kembaliKeMenu(menuCustomer)
     else:
         for t_idx, transaksi in enumerate(Riwayat_Transaksi, 1):
             print(f"\nTransaksi {t_idx}:")
-            print(f"{'No':<4} {'Nama Produk':<30}{'Jumlah':>8}{'Subtotal':>14}")
-            print('-'*60)
+            # transaksi sekarang berupa dict {"waktu": datetime, "items": {...}}
+            waktu = transaksi.get("waktu")
+            items = transaksi.get("items", {})
+            if isinstance(waktu, datetime):
+                print("Waktu:", waktu.strftime("%Y-%m-%d %H:%M:%S"))
+
+            tabel_transaksi = PrettyTable()
+            tabel_transaksi.field_names = ["No", "Nama Produk", "Jumlah", "Subtotal"]
             total_t = 0
-            for j, (product_id, jumlah) in enumerate(transaksi.items(), 1):
+            for j, (product_id, jumlah) in enumerate(items.items(), 1):
                 nama = Grosir.get(product_id, {}).get('nama', '<produk dihapus>')
                 harga = Grosir.get(product_id, {}).get('harga', 0)
                 subtotal = harga * jumlah
                 total_t += subtotal
-                print(f"{j:<4} {nama:<30}{jumlah:>8} Rp.{subtotal:>11,}")
-            print('-'*60)
-            print(f"{'Total transaksi:':<46} Rp.{total_t:>8,}\n")
-        kembaliKeMenu(menuCustomer)
+                tabel_transaksi.add_row([j, nama, jumlah, f"Rp.{subtotal:,}"])
+
+            tabel_transaksi.add_row(["", "", "Total:", f"Rp.{total_t:,}"])
+            tabel_transaksi.align["Nama Produk"] = "l"
+            tabel_transaksi.align["Subtotal"] = "l"
+            print(tabel_transaksi)
+        return kembaliKeMenu(menuCustomer)
+ 
