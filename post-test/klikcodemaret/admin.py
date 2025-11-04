@@ -1,32 +1,16 @@
-from Headline import topMessage
-from modulOpsi import listGrosir, opsiLagi, kembaliKeMenu, opsiLogout
-from dictnlist import Grosir
+# admin.py
+from data import Grosir
+from utils import topMessage, opsiLagi, kembaliKeMenu, opsiLogout
 
-def menuAdmin():
-    topMessage("Menu: Admin")
-    print('1. Produk yang tersedia')
-    print('2. Tambah Produk')
-    print('3. Hapus Produk')
-    print('4. Logout')
-    pilihanAdmin = input("\nPilih menu opsi yang tersedia diatas [1/2/3/4]: ")
-    if pilihanAdmin == "1":
-        topMessage("GROSIR")
-        listGrosir()
-        kembaliKeMenu(menuAdmin)
-    elif pilihanAdmin == "2":
-        topMessage("TAMBAH PRODUK")
-        tambahProduk()
-    elif pilihanAdmin == "3":
-        topMessage("HAPUS PRODUK")
-        hapusProduk()
-    elif pilihanAdmin == "4":
-        opsiLogout(menuAdmin, "admin")
-    else:
-        print("\n!! Pilihan tidak valid. Silahkan coba lagi. !!\n")
-        return menuAdmin()
+# FUNGSI LIST GROSIR
+def listGrosir():
+    print(f"{'No':<4} {'Nama Produk':<30}{'Harga':>12}")
+    print("-"*50)
+    for i, produk in Grosir.items():
+        print(f"{i:<4} {produk['nama']:<30} Rp.{produk['harga']:>9,}")
+    print("-"*50)
     
 # FUNGSI TAMBAH PRODUK
-
 def tambahProduk():
     nama_produk_baru = input("\nMasukkan nama produk baru: ")
     harga_produk_baru = input("Masukkan harga produk baru: Rp.")
@@ -44,7 +28,6 @@ def tambahProduk():
     print(f"\nProduk '{nama_produk_baru}' dengan harga Rp.{harga_produk_baru:,} berhasil ditambahkan dengan ID {id_baru}!")
     opsiLagi(menuAdmin, "Tambah produk lagi?", tambahProduk)
     
-
 # FUNGSI HAPUS PRODUK
 def hapusProduk():
     listGrosir()
@@ -77,3 +60,27 @@ def hapusProduk():
         print("\nProduk berhasil dihapus.")
         opsiLagi(menuAdmin, "Hapus produk lagi?", hapusProduk)
     inputHapusProduk()
+    
+# FUNGSI MENU ADMIN
+def menuAdmin():
+    topMessage("Menu: Admin")
+    print('1. Produk yang tersedia')
+    print('2. Tambah Produk')
+    print('3. Hapus Produk')
+    print('4. Logout')
+    pilihanAdmin = input("\nPilih menu opsi yang tersedia diatas [1/2/3/4]: ")
+    if pilihanAdmin == "1":
+        topMessage("GROSIR")
+        listGrosir()
+        kembaliKeMenu(menuAdmin)
+    elif pilihanAdmin == "2":
+        topMessage("TAMBAH PRODUK")
+        tambahProduk()
+    elif pilihanAdmin == "3":
+        topMessage("HAPUS PRODUK")
+        hapusProduk()
+    elif pilihanAdmin == "4":
+        opsiLogout(menuAdmin, "admin")
+    else:
+        print("\n!! Pilihan tidak valid. Silahkan coba lagi. !!\n")
+        return menuAdmin()

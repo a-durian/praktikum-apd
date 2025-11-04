@@ -1,42 +1,12 @@
-# IMPORT DICT N LIST
-from dictnlist import Grosir
-from menu_Admin import menuAdmin
-from menu_Customer import menuCustomer
-from Registrasi import Registrasi
-
-from prettytable import PrettyTable
-tabel = PrettyTable()
-
-# FUNGSI PILIH KARAKTER
-def pilihKarakter():
-    print("\nPilih karakter anda:")
-    print('1. Admin')
-    print('2. Customer')
-    pilihan_karakter = input("\nPilih opsi diatas sebelum memasuki program [1/2]: ")
-    if pilihan_karakter == '1':
-        Registrasi(menuAdmin)
-        menuAdmin()
-    elif pilihan_karakter == '2':
-        Registrasi(menuCustomer)
-        menuCustomer()
-    else:
-        print("\n!! Pilihan tidak valid. Silahkan coba lagi. !!")
-        pilihKarakter()
-        
-# FUNGSI LIST GROSIR
-def listGrosir():
-    # print(f"{'No':<4} {'Nama Produk':<30}{'Harga':>12}")
-    # print("-"*50)
-    # for i, produk in Grosir.items():
-    #     print(f"{i:<4} {produk['nama']:<30} Rp.{produk['harga']:>9,}")
-    # print("-"*50)
-    tabel.field_names = ["No.", "Produk", "Harga"]
-    for i, produk in Grosir.items():
-        tabel.add_row([i, produk['nama'], produk['harga']])
-    print(tabel)
+from main import pilihKarakter
+# FUNGSI TOP MESSAGE
+def topMessage(topMessage):
+    msgLong = ("="*21 + f" {topMessage} " + "="*21)
+    print("="*len(msgLong))
+    print(msgLong)
+    print("="*len(msgLong))
     
-
-# FUNGSI KEMBALI KE MENU()
+# FUNGSI KEMBALI KE MENU AWAL
 def kembaliKeMenu(menuAwalnya):
     input_kembali = input("\nMasukkan [0] untuk kembali ke menu awal: ")
     if input_kembali == '0':
@@ -46,7 +16,6 @@ def kembaliKeMenu(menuAwalnya):
         print("\n!! Tolong ikuti instruksi yang tersedia. Silahkan coba lagi. !!\n")
         kembaliKeMenu(menuAwalnya)
         
-
 # FUNGSI OPSI MENGULANG LAGI ATAU KEMBALI KE MENU AWAL
 def opsiLagi(kembali, outputLagi, fungsiKembali):
     opsi_lagi = input(f"{outputLagi} [y/n]: ")
@@ -59,7 +28,6 @@ def opsiLagi(kembali, outputLagi, fungsiKembali):
         print("\n!! Input tidak valid. Coba lagi !!\n")
         opsiLagi(kembali, outputLagi, fungsiKembali)
         
-
 # FUNGSI OPSI LOGOUT
 def opsiLogout(insertMenu, menuApa):
     inputLogout = input("\nApakah anda yakin untuk logout dari akun anda? [y/n]: ")

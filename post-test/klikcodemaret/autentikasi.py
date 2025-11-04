@@ -1,5 +1,4 @@
-
-# FUNGSI REGISTRASI
+# FUNGSI REGISTRASI DAN LOGIN ADMIN
 def Registrasi(fungsiMenu):
     def Login(fungsiMenu):
         percobaan = 5

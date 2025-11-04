@@ -1,11 +1,68 @@
-from menu_Customer import menuCustomer
-from modulOpsi import kembaliKeMenu, opsiLagi
-from dictnlist import Grosir, Keranjang_Belanja, Riwayat_Transaksi
+from utils import topMessage, kembaliKeMenu, opsiLagi, opsiLogout
+from data import Grosir, Keranjang_Belanja, Riwayat_Transaksi
+from admin import listGrosir
 
+# FUNGSI ALUR CUSTOMER
+def menuCustomer():
+    topMessage("Menu: Customer")
+    print("1. Grosir")
+    print("2. Keranjang Belanja")
+    print("3. Transaksi")
+    print("4. Logout")
+    opsi_customer = input("Pilih menu opsi yang tersedia diatas [1/2/3/4]: ")
+    if opsi_customer == "1":
+        topMessage("GROSIR")
+        Checkout()
+        kembaliKeMenu(menuCustomer)
+    elif opsi_customer == "2":
+        topMessage("KERANJANG BELANJA")
+        listKeranjangBelanja()
+        menuKeranjang()
+    elif opsi_customer == "3":
+        topMessage("RIWAYAT TRANSAKSI")
+        menuTransaksi()
+    elif opsi_customer == "4":
+        opsiLogout(menuCustomer, "customer")
+    else:
+        print("\n!! Pilihan tidak valid. Silahkan coba lagi. !!\n")
+        return menuCustomer()
+    
+# FUNGSI CHECKOUT 
+def Checkout():
+    print("")
+    listGrosir()
+    print("\nMasukkan [0] untuk kembali ke menu awal\n")
+    menu_grosir_input = input("Silahkan pilih nomor produk untuk dimasukkan ke keranjang belanja: ")
+    if menu_grosir_input.isdigit():
+        menu_grosir = int(menu_grosir_input)
+        if menu_grosir == 0:
+            print("\nKembali ke menu awal...\n")
+            menuCustomer()
+        elif menu_grosir in Grosir:
+            jumlah_input = input("Masukkan jumlah [1/2/...]: ")
+            if jumlah_input == "":
+                jumlah = 1
+            elif jumlah_input.isdigit() and int(jumlah_input) > 0:
+                jumlah = int(jumlah_input)
+            else:
+                print("\nJumlah tidak valid. Silahkan coba lagi.\n")
+                Checkout()
+            Keranjang_Belanja[menu_grosir] = Keranjang_Belanja.get(menu_grosir, 0) + jumlah
+            nama = Grosir[menu_grosir]['nama']
+            harga = Grosir[menu_grosir]['harga']
+            print(f"\n+ {nama} x{jumlah} seharga Rp.{harga:,} berhasil ditambahkan ke keranjang belanja.\n")
+            opsiLagi(menuCustomer, "Checkout produk lagi?", Checkout)
+        else:
+            print("\nProduk tidak ditemukan. Silahkan coba lagi.\n")
+            Checkout()
+    else:
+        print("\n!! Input harus berupa nomor. Silahkan coba lagi. !!\n")
+        Checkout()
+        
 # LIST KERANJANG BELANJA
 def listKeranjangBelanja():
     print(f"{'No':<4} {'Nama Produk':<30}{'Harga':>12}")
-    print("-"*50)
+    print("-"*50) 
     if not Keranjang_Belanja:
         print("Keranjang belanja kosong.")
         kembaliKeMenu(menuCustomer)
@@ -20,22 +77,8 @@ def listKeranjangBelanja():
         print("-"*50)
         print(f"{'Total pembayaran:':<35} Rp.{total:>9,}")
         menuKeranjang()
-    if not Keranjang_Belanja:
-        print("Keranjang belanja kosong.")
-        kembaliKeMenu(menuCustomer)
-    else:
-        total = 0
-        for i, (product_id, jumlah) in enumerate(Keranjang_Belanja.items(), 1):
-            nama = Grosir[product_id]['nama']
-            harga = Grosir[product_id]['harga']
-            subtotal = harga * jumlah
-            total += subtotal
-            print(f"{i:<4} {nama:<30} {jumlah:>3}  Rp.{subtotal:>9,}")
-        print("-"*50)
-        print(f"{'Total pembayaran:':<35} Rp.{total:>9,}")
-        menuKeranjang()
-
-# FUNGSI MENU KERANJANG BELANJA
+        
+# MENU KERANJANG
 def menuKeranjang():
     
     print("\nMenu Keranjang Belanja:")
@@ -76,7 +119,7 @@ def opsiPembayaran():
     else:
         print("\n!! Tolong ikuti instruksi yang tersedia. Silahkan coba lagi. !!\n")
         return opsiPembayaran()
-
+    
 # OPSI HAPUS DARI KERANJANG
 def opsiHapusDariKeranjang():
     print("\nHapus produk dari keranjang belanja...\n")
@@ -103,36 +146,24 @@ def opsiHapusDariKeranjang():
         else:
             print("\n! Tolong ikuti instruksi yang tersedia. Silahkan coba lagi.\n")
             return opsiHapusDariKeranjang()
-
-# LIST KERANJANG BELANJA
-def listKeranjangBelanja():
-    print(f"{'No':<4} {'Nama Produk':<30}{'Harga':>12}")
-    print("-"*50)
-    if not Keranjang_Belanja:
-        print("Keranjang belanja kosong.")
+        
+# MENU TRANSAKSI CUSTOMER
+def menuTransaksi():
+    if not Riwayat_Transaksi:
+        print("Belum ada transaksi.")
         kembaliKeMenu(menuCustomer)
     else:
-        total = 0
-        for i, (product_id, jumlah) in enumerate(Keranjang_Belanja.items(), 1):
-            nama = Grosir[product_id]['nama']
-            harga = Grosir[product_id]['harga']
-            subtotal = harga * jumlah
-            total += subtotal
-            print(f"{i:<4} {nama:<30} {jumlah:>3}  Rp.{subtotal:>9,}")
-        print("-"*50)
-        print(f"{'Total pembayaran:':<35} Rp.{total:>9,}")
-        menuKeranjang()
-    if not Keranjang_Belanja:
-        print("Keranjang belanja kosong.")
+        for t_idx, transaksi in enumerate(Riwayat_Transaksi, 1):
+            print(f"\nTransaksi {t_idx}:")
+            print(f"{'No':<4} {'Nama Produk':<30}{'Jumlah':>8}{'Subtotal':>14}")
+            print('-'*60)
+            total_t = 0
+            for j, (product_id, jumlah) in enumerate(transaksi.items(), 1):
+                nama = Grosir.get(product_id, {}).get('nama', '<produk dihapus>')
+                harga = Grosir.get(product_id, {}).get('harga', 0)
+                subtotal = harga * jumlah
+                total_t += subtotal
+                print(f"{j:<4} {nama:<30}{jumlah:>8} Rp.{subtotal:>11,}")
+            print('-'*60)
+            print(f"{'Total transaksi:':<46} Rp.{total_t:>8,}\n")
         kembaliKeMenu(menuCustomer)
-    else:
-        total = 0
-        for i, (product_id, jumlah) in enumerate(Keranjang_Belanja.items(), 1):
-            nama = Grosir[product_id]['nama']
-            harga = Grosir[product_id]['harga']
-            subtotal = harga * jumlah
-            total += subtotal
-            print(f"{i:<4} {nama:<30} {jumlah:>3}  Rp.{subtotal:>9,}")
-        print("-"*50)
-        print(f"{'Total pembayaran:':<35} Rp.{total:>9,}")
-        menuKeranjang()
