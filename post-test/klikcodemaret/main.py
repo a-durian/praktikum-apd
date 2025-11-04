@@ -2,10 +2,10 @@ from os import system, name
 def clear():
     _ = system('cls' if name == 'nt' else 'clear')
 
-from utils import topMessage
-from admin import menuAdmin
-from customer import menuCustomer
-from autentikasi import Registrasi
+from helperss import topMessage
+from admin1 import menuAdmin
+from customer1 import menuCustomer
+from autentikasi_register import Registrasi
 
 # FUNGSI PILIH KARAKTER
 def pilihKarakter():

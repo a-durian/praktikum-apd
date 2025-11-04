@@ -1,7 +1,7 @@
 # admin.py
-from data import Grosir
-from utils import topMessage, opsiLagi, kembaliKeMenu, opsiLogout
-
+from data_dictlist import Grosir
+from tambahan import opsiLagi, kembaliKeMenu, opsiLogout
+from helperss import topMessage
 # FUNGSI LIST GROSIR
 def listGrosir():
     print(f"{'No':<4} {'Nama Produk':<30}{'Harga':>12}")

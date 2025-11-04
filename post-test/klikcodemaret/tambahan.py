@@ -1,10 +1,11 @@
 from main import pilihKarakter
-# FUNGSI TOP MESSAGE
-def topMessage(topMessage):
-    msgLong = ("="*21 + f" {topMessage} " + "="*21)
-    print("="*len(msgLong))
-    print(msgLong)
-    print("="*len(msgLong))
+
+# # FUNGSI TOP MESSAGE
+# def topMessage(topMessage):
+#     msgLong = ("="*21 + f" {topMessage} " + "="*21)
+#     print("="*len(msgLong))
+#     print(msgLong)
+#     print("="*len(msgLong))
     
 # FUNGSI KEMBALI KE MENU AWAL
 def kembaliKeMenu(menuAwalnya):
